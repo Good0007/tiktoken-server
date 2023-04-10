@@ -35,7 +35,7 @@ def countTokenFromMsg():
         count = num_tokens_from_messages(data['messages'], model)
     except:
         print("/tokenize/count - error: ", data)
-        return json.dumps({'code': '0', 'error': 'parse error!', 'count': count})
+        return json.dumps({'code': '0', 'error': 'Model not found!', 'count': count})
     return json.dumps({'code': '0', 'count': count})
 
 
@@ -76,6 +76,10 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301"):
     elif model == "gpt-4-0314":
         tokens_per_message = 3
         tokens_per_name = 1
+    elif model == "text-davinci-002" or model == "text-davinci-003":
+        encoding = tiktoken.get_encoding("p50k_base")
+        tokens_per_message = 4
+        tokens_per_name = -1
     else:
         raise NotImplementedError(
             f"""num_tokens_from_messages() is not implemented for model {model}. See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens.""")
